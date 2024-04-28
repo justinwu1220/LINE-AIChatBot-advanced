@@ -30,8 +30,6 @@ public class MessageController {
         //將解析出的文字交給openAIService處理，並取得openAI的回覆
         String chatGPTResponse = openAIService.getChatGPTResponse(originalMessageText);
 
-        System.out.println(chatGPTResponse);
-
         //line官方帳號回傳訊息給用戶
         return new TextMessage(chatGPTResponse);
     }

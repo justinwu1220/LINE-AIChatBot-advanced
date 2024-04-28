@@ -32,7 +32,6 @@ public class OpenAIServiceImpl implements OpenAIService {
         headers.set("Content-Type", "application/json");
 
         //建立json request body 內含使用模型、使用的角色role、溝通指令content
-        //String requestBody = "{ \"model\": \"gpt-3.5-turbo\", \"messages\": [{ \"role\": \"user\", \"content\": \""+ messageText +"\" }] }";
         String requestBody = String.format(
                 "{ \"model\": \"gpt-3.5-turbo\", \"messages\": [{ \"role\": \"user\", \"content\": \"%s\" }] }", messageText);
 
@@ -45,6 +44,7 @@ public class OpenAIServiceImpl implements OpenAIService {
         AiResponse aiResponse = parseJson(response.getBody());
         List<Choice> choices = aiResponse.getChoices();
         StringBuilder answer = new StringBuilder();
+
         for(Choice choice : choices){
             String content = choice.getMessage().getContent();
             answer.append(content);
