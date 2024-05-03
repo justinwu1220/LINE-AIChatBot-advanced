@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.justinwu</groupId>
-	<artifactId>LINE-AIChatBot</artifactId>
+	<artifactId>LINE-AIChatBot-advanced</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>LINE-AIChatBot</name>
-	<description>LINE-AIChatBot</description>
+	<name>LINE-AIChatBot-advanced</name>
+	<description>LINE-AIChatBot-advanced</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>

@@ -1,4 +1,4 @@
-package com.justinwu.lineaichatbot.model;
+package com.justinwu.lineaichatbot.model.openAI;
 
 import java.util.List;
 

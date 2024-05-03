@@ -1,15 +1,15 @@
 package com.justinwu.lineaichatbot.service.impl;
 
-import com.justinwu.lineaichatbot.model.AiResponse;
-import com.justinwu.lineaichatbot.model.Choice;
+import com.justinwu.lineaichatbot.model.openAI.AiResponse;
+import com.justinwu.lineaichatbot.model.openAI.Choice;
 import com.justinwu.lineaichatbot.service.OpenAIService;
+import com.justinwu.lineaichatbot.util.JsonParser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.StringWriter;
 import java.util.List;
 
 
@@ -41,7 +41,7 @@ public class OpenAIServiceImpl implements OpenAIService {
         //將http request 用 post 方式 傳給openAI api，並取得回應
         var response = restTemplate.postForEntity(apiUrl, request, String.class);
 
-        AiResponse aiResponse = parseJson(response.getBody());
+        AiResponse aiResponse = JsonParser.parseJson(response.getBody(), AiResponse.class);
         List<Choice> choices = aiResponse.getChoices();
         StringBuilder answer = new StringBuilder();
 
@@ -55,19 +55,6 @@ public class OpenAIServiceImpl implements OpenAIService {
             return answer.toString();
         } else {
             return "Error";
-        }
-    }
-
-    @Override
-    public AiResponse parseJson(String json) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            // 解析JSON為Java object
-            AiResponse result = objectMapper.readValue(json, AiResponse.class);
-            return result;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
         }
     }
 }

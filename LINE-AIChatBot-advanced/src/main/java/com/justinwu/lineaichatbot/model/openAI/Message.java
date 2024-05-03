@@ -1,4 +1,4 @@
-package com.justinwu.lineaichatbot.model;
+package com.justinwu.lineaichatbot.model.openAI;
 
 public class Message {
     private String role;
