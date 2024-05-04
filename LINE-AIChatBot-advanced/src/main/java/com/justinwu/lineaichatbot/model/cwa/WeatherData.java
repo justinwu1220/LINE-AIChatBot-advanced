@@ -1,33 +1,33 @@
 package com.justinwu.lineaichatbot.model.cwa;
 
+import java.util.List;
 
 public class WeatherData {
-    private String dataTime;
-    private ElementValue Wx;
-    private ElementValue T;
+    private String city;
+    private String district;
+    List<WeatherElement> weatherElementList;
 
-    public String getDataTime() {
-        return dataTime;
+    public String getCity() {
+        return city;
     }
 
-    public void setDataTime(String dataTime) {
-        this.dataTime = dataTime;
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public ElementValue getWx() {
-        return Wx;
+    public String getDistrict() {
+        return district;
     }
 
-    public void setWx(ElementValue wx) {
-        Wx = wx;
+    public void setDistrict(String district) {
+        this.district = district;
     }
 
-    public ElementValue getT() {
-        return T;
+    public List<WeatherElement> getWeatherElementList() {
+        return weatherElementList;
     }
 
-    public void setT(ElementValue t) {
-        T = t;
+    public void setWeatherElementList(List<WeatherElement> weatherElementList) {
+        this.weatherElementList = weatherElementList;
     }
 }
-

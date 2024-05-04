@@ -34,8 +34,11 @@ public class MessageController {
         String responseText;
 
         switch(originalMessageText){
+            case "今日天氣":
+                responseText = cwaService.getWeather(1);
+                break;
             case "今明天氣":
-                responseText = cwaService.getWeather();
+                responseText = cwaService.getWeather(2);
                 break;
             default:
                 //將解析出的文字交給openAIService處理，並取得openAI的回覆
