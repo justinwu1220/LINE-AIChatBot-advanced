@@ -33,7 +33,7 @@
 
 * 輸入 設定地區 縣市 鄉鎮市區 可將用戶地區設為指定地區
 * 天氣預報功能將使用新地區作為查詢依據
-
+* 地區名稱請參考: <https://opendata.cwa.gov.tw/opendatadoc/Opendata_City.pdf>
 <img src="https://github.com/justinwu1220/LINE-AIChatBot-advanced/blob/main/img/S__4399147_0.jpg" width="300"> <img src="https://github.com/justinwu1220/LINE-AIChatBot-advanced/blob/main/img/S__4399145_0.jpg" width="300">
 <br/><br/><br/><br/>
 
