@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.justinwu.lineaichatbot.model.cwa.WeatherData;
 import com.justinwu.lineaichatbot.model.cwa.WeatherElement;
 import com.justinwu.lineaichatbot.model.cwa.WeatherJsonConverter;
+import com.justinwu.lineaichatbot.model.user.User;
 import com.justinwu.lineaichatbot.service.CWAService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -19,10 +20,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class CWAServiceImpl implements CWAService {
@@ -32,50 +30,84 @@ public class CWAServiceImpl implements CWAService {
 
     private RestTemplate restTemplate = new RestTemplate();
 
+    private Map<String, String> cityMap = new HashMap<>();
+
+    CWAServiceImpl(){
+        cityMap.put("宜蘭縣","001");
+        cityMap.put("桃園市","005");
+        cityMap.put("新竹縣","009");
+        cityMap.put("苗栗縣","013");
+        cityMap.put("彰化縣","017");
+        cityMap.put("南投縣","021");
+        cityMap.put("雲林縣","025");
+        cityMap.put("嘉義縣","029");
+        cityMap.put("屏東縣","033");
+        cityMap.put("臺東縣","037");
+        cityMap.put("花蓮縣","041");
+        cityMap.put("澎湖縣","045");
+        cityMap.put("基隆市","049");
+        cityMap.put("新竹市","053");
+        cityMap.put("嘉義市","057");
+        cityMap.put("臺北市","061");
+        cityMap.put("高雄市","065");
+        cityMap.put("新北市","069");
+        cityMap.put("臺中市","073");
+        cityMap.put("臺南市","077");
+        cityMap.put("連江縣","081");
+        cityMap.put("金門縣","085");
+    }
+
+
     @Override
-    public String getWeather(Integer searchDays) throws JsonProcessingException {
-        // 使用 LocalDate.now() 取得今日的日期
-        LocalDate startDay = LocalDate.now();
+    public String getWeather(User user, Integer searchDays) {
+        try {
+            // 使用 LocalDate.now() 取得今日的日期
+            LocalDate startDay = LocalDate.now();
 
-        // 使用 LocalTime.of() 設定時間為 00:00:00
-        LocalTime startTime = LocalTime.of(0, 0, 0);
-        LocalTime endTime = LocalTime.of(23, 59, 59);
+            // 使用 LocalTime.of() 設定時間為 00:00:00
+            LocalTime startTime = LocalTime.of(0, 0, 0);
+            LocalTime endTime = LocalTime.of(23, 59, 59);
 
-        // 組合日期和時間
-        LocalDateTime startDayMidnight = LocalDateTime.of(startDay, startTime);
-        LocalDateTime endDayMidnight = LocalDateTime.of(startDay.plusDays(searchDays-1), endTime);
+            // 組合日期和時間
+            LocalDateTime startDayMidnight = LocalDateTime.of(startDay, startTime);
+            LocalDateTime endDayMidnight = LocalDateTime.of(startDay.plusDays(searchDays-1), endTime);
 
 
-        // 定義所需的格式，cwa api 要求格式為 "yyyy-MM-dd'T'HH:mm:ss"
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+            // 定義所需的格式，cwa api 要求格式為 "yyyy-MM-dd'T'HH:mm:ss"
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
-        // 格式化日期時間對象為字符串
-        String formattedStartDay = startDayMidnight.format(formatter);
-        String formattedEndDay = endDayMidnight.format(formatter);
+            // 格式化日期時間對象為字符串
+            String formattedStartDay = startDayMidnight.format(formatter);
+            String formattedEndDay = endDayMidnight.format(formatter);
 
-        System.out.println("start : " + formattedStartDay);
-        System.out.println("end : " + formattedEndDay);
 
-        String url = "https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-D0047-065";
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
-                .queryParam("Authorization", token)
-                .queryParam("locationName", "三民區")
-                .queryParam("elementName", "T,Wx,PoP3h")
-                .queryParam("timeFrom", formattedStartDay)
-                .queryParam("timeTo", formattedEndDay);
+            String url = "https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-D0047-";
+            String city = cityMap.get(user.getCity());
+            url = url + city;
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
+                    .queryParam("Authorization", token)
+                    .queryParam("locationName", user.getDistrict())
+                    .queryParam("elementName", "T,Wx")
+                    .queryParam("timeFrom", formattedStartDay)
+                    .queryParam("timeTo", formattedEndDay);
 
-        URI finalUri = builder.build().encode().toUri();
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Accept", "application/json");
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-        ResponseEntity<String> response = restTemplate.exchange(finalUri, HttpMethod.GET, entity, String.class);
+            URI finalUri = builder.build().encode().toUri();
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", "application/json");
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+            ResponseEntity<String> response = restTemplate.exchange(finalUri, HttpMethod.GET, entity, String.class);
 
-        WeatherJsonConverter weatherJsonConverter = new WeatherJsonConverter();
-        WeatherData weatherData = weatherJsonConverter.convert(response.getBody());
+            WeatherJsonConverter weatherJsonConverter = new WeatherJsonConverter();
+            WeatherData weatherData = weatherJsonConverter.convert(response.getBody());
 
-        String resultText = simplifyWeatherData(weatherData);
+            String resultText = simplifyWeatherData(weatherData);
 
-        return resultText;
+            return resultText;
+
+        }catch (Exception e){
+            return "查無天氣資料";
+        }
+
     }
 
     private String simplifyWeatherData(WeatherData weatherData){

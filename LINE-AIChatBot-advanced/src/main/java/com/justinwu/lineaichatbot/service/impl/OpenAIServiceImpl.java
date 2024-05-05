@@ -2,6 +2,7 @@ package com.justinwu.lineaichatbot.service.impl;
 
 import com.justinwu.lineaichatbot.model.openAI.AiResponse;
 import com.justinwu.lineaichatbot.model.openAI.Choice;
+import com.justinwu.lineaichatbot.model.user.User;
 import com.justinwu.lineaichatbot.service.OpenAIService;
 import com.justinwu.lineaichatbot.util.JsonParser;
 import org.springframework.beans.factory.annotation.Value;

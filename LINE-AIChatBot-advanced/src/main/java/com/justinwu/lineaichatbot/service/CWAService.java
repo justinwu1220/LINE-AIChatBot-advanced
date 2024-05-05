@@ -1,7 +1,8 @@
 package com.justinwu.lineaichatbot.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.justinwu.lineaichatbot.model.user.User;
 
 public interface CWAService {
-    String getWeather(Integer searchDays) throws JsonProcessingException;
+    String getWeather(User user, Integer searchDays) throws JsonProcessingException;
 }
