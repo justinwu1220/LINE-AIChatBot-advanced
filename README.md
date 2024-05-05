@@ -6,10 +6,14 @@
 ## 技術
 - LineBot :
   - 使用LINE Developer建立機器人
-- JAVA :
-  - Spring Boot: MVC架構實作機器人後端程式
+    
+- JAVA Spring Boot:
+  - MVC架構實作機器人後端程式
+  - JDBC連接資料庫
+    
 - MySQL :
   - 建立用戶資料庫
+    
 - 第三方 api :
   - 串接OpenAI API 實現ai回覆訊息
   - 串接CWA opendata API 取得天氣預報
